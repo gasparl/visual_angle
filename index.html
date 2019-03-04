@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html id="html_id" style="background:black;">
+
+<head>
+    <title>Visual angle calculator</title>
+    <meta charset="UTF-8">
+    <meta name="author" content="Gaspar Lukacs">
+    <meta name="keywords" content="visual angle, calculator, psychology, experiment, degrees, distance, eye">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Online visual angle calculator for psychological experiments.">
+    <style type="text/css">
+        a {
+            text-decoration: none;
+            font-style: italic;
+        }
+
+        a:link {
+            color: #c6c6ec;
+        }
+
+        a:visited {
+            color: #d9d9df;
+        }
+
+        a:hover {
+            color: #d1d1ff;
+        }
+
+        body {
+            width: 70%;
+            font-size: 2.5vw;
+            line-height: 2.4vw;
+            color: #FFFFFF;
+            position: absolute;
+            left: 50%;
+            top: 1.5%;
+            transform: translateX(-50%);
+        }
+
+        @media only screen and (max-width: 500px) {
+            body {
+                width: 94%;
+                font-size: 3.5vw;
+                line-height: 5vw;
+                transform: none;
+                left: 1%;
+            }
+        }
+    </style>
+    <script>
+        var visual_angle, distance, object_length;
+
+        function get_vals() {
+            distance = parseFloat(document.getElementById("d_input").value);
+            object_length = parseFloat(document.getElementById("o_input").value);
+            visual_angle = parseFloat(document.getElementById("va_input").value);
+        }
+
+        function calc_visual_angle() {
+            get_vals();
+            if ( isNaN(object_length) || isNaN(distance) ) {
+                document.getElementById("va_output").innerHTML = "<i>Valid distance and object size required.</i>"
+            } else {
+
+                visual_angle = Math.atan((object_length / 2) / distance) * (180 / Math.PI) * 2;
+                var degree = Math.floor(visual_angle);
+                var min = Math.floor((visual_angle - degree) * 60);
+                var sec = (visual_angle - degree - min / 60) * 3600;
+                document.getElementById("va_output").innerHTML = "<b>" + visual_angle.toFixed(2) + "&deg;</b> " + "(" + degree + "&deg; " + min + "' " + sec.toFixed() + "'') [with distance <i>" + distance + "</i>, object size <i>" +
+                    object_length + "</i>]";
+            }
+        }
+
+        function calc_distance() {
+            get_vals();
+            if ( isNaN(object_length) || isNaN(visual_angle) ) {
+                document.getElementById("d_output").innerHTML = "<i>Valid visual angle and object size required.</i>"
+            } else {
+                distance = (object_length / 2) / Math.tan(visual_angle * (Math.PI / 180) / 2);
+                document.getElementById("d_output").innerHTML = "<b>" + distance.toFixed(2) + "</b> [with visual angle <i>" + visual_angle + "</i>, object size <i>" + object_length + "</i>]";
+            }
+        }
+
+        function calc_object_length() {
+            get_vals();
+            if ( isNaN(distance) || isNaN(visual_angle) ) {
+                document.getElementById("o_output").innerHTML = "<i>Valid visual angle and distance required.</i>"
+            } else {
+                object_length = distance * Math.tan( visual_angle * (Math.PI / 180) / 2 ) * 2;
+                document.getElementById("o_output").innerHTML = "<b>" + object_length.toFixed(2) + "</b> [with visual angle <i>" + visual_angle + "</i>, distance <i>" + distance + "</i>]";
+            }
+        }
+
+
+    </script>
+</head>
+
+<body>
+
+    <br>Visual angle:
+    <br><input id="va_input" size="10">
+    <br><button onclick="calc_visual_angle()">Calculate</button>
+    <br><span id="va_output"></span>
+    <br>
+    <br>Distance:
+    <br><input id="d_input" size="10">
+    <br><button onclick="calc_distance()">Calculate</button>
+    <br><span id="d_output"></span>
+    <br>
+    <br>Size of viewed object:
+    <br><input id="o_input" size="10">
+    <br><button onclick="calc_object_length()">Calculate</button>
+    <br><span id="o_output"></span>
+
+</body>
+
+</html>
